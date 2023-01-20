@@ -39,7 +39,6 @@ app.post('/api/courses', (req,res) => {
             id: courses.length + 1,
             name:req.body.name
         }
-        console.log(course);
         courses.push(course)
         res.send(course)
     }
@@ -56,16 +55,33 @@ app.post('/api/courses', (req,res) => {
     );
     
     app.put('/api/courses/:id', (req,res)=>{
-        //Write the code in order to look up the course, if not existing return a 404
+       // Write the code in order to look up the course, if not existing return a 404
                 //otherwise 
                         //update the course
                         //return the updated course
-                        const course = courses.find(c=>c.id === parseInt(req.params.id));
-                        if(!course){
-                            res.status(404).send("The course with the given ID was not found")
-                            return
-                        }
-                        course.name = req.body.name
-                        res.send(course);
-        });
+        const course = courses.find(c=>c.id === parseInt(req.params.id));
+        if(!course){
+            res.status(404).send("The course with the given ID was not found")
+            return
+        }
+        var indx = courses.findIndex(x => x.id == course.id)
+        courses[indx] = {id: parseInt(req.body.id), name: req.body.name}
+        res.send(courses[indx]);
+    });
+        
+    app.delete('/api/courses/:id', (req,res)=>{
+        //code the following logic
+        //look up the course by id
+            //return 404 if does not exist
+            //delete the course by index HINT: use the indexOf() and splice() methods
+            // return the response to the client the course that was deleted
+            const course = courses.find(c=>c.id === parseInt(req.params.id));
+            if(!course){
+                res.status(404).send("The course with the given ID was not found")
+                return
+            }
+        var indx = courses.findIndex(x => x.id == course.id)
+        res.send(courses.splice(indx, 1))
+    });
+    
         
